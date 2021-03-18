@@ -125,7 +125,7 @@ export default {
         } else {
           this.emitter.emit('push-message', {
             style: 'danger',
-            title: '更新產品成功',
+            title: '更新產品失敗',
             content: response.data.message.join('、'),
           });
           productComponent.hideModal();

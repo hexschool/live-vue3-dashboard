@@ -37,8 +37,26 @@ const routes = [
         component: () => import('../views/Coupons.vue'),
       },
       {
-        path: 'posts',
-        component: () => import('../views/Posts.vue'),
+        path: 'article',
+        component: () => import('../views/Article.vue'),
+      },
+    ],
+  },
+  {
+    path: '/user',
+    component: () => import('../views/Dashboard.vue'),
+    children: [
+      {
+        path: 'blog',
+        component: () => import('../views/UserBlog.vue'),
+      },
+      {
+        path: 'cart',
+        component: () => import('../views/UserCart.vue'),
+      },
+      {
+        path: 'checkout/:orderId',
+        component: () => import('../views/UserCheckout.vue'),
       },
     ],
   },

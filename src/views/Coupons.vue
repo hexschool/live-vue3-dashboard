@@ -1,7 +1,7 @@
 <template>
   <div>
     <Loading :active="isLoading"></Loading>
-    <div class="text-right mt-4">
+    <div class="text-end mt-4">
       <button class="btn btn-primary" @click="openCouponModal(true)">
         建立新的優惠券
       </button>
@@ -20,29 +20,36 @@
       <tr v-for="(item, key) in coupons" :key="key">
         <td>{{ item.title }}</td>
         <td>{{ item.percent }}%</td>
-        <td>{{ item.due_date }}</td>
+        <td>{{ $filters.date(item.due_date) }}</td>
         <td>
           <span v-if="item.is_enabled === 1" class="text-success">啟用</span>
           <span v-else class="text-muted">未起用</span>
         </td>
         <td>
-          <button class="btn btn-outline-primary btn-sm"
-                  @click="openCouponModal(false, item)"
-          >編輯</button>
+          <div class="btn-group">
+            <button class="btn btn-outline-primary btn-sm"
+                    @click="openCouponModal(false, item)"
+            >編輯</button>
+            <button class="btn btn-outline-danger btn-sm"
+                    @click="openDelCouponModal(item)"
+            >刪除</button>
+          </div>
         </td>
       </tr>
       </tbody>
     </table>
     <couponModal :coupon="tempCoupon" ref="couponModal"
     @update-coupon="updateCoupon"/>
+    <DelModal :item="tempCoupon" ref="delModal" @del-item="delCoupon"/>
   </div>
 </template>
 
 <script>
 import CouponModal from '@/components/CouponModal.vue';
+import DelModal from '@/components/DelModal.vue';
 
 export default {
-  components: { CouponModal },
+  components: { CouponModal, DelModal },
   props: {
     config: Object,
   },
@@ -71,6 +78,11 @@ export default {
       }
       this.$refs.couponModal.openModal();
     },
+    openDelCouponModal(item) {
+      this.tempCoupon = { ...item };
+      const delComponent = this.$refs.delModal;
+      delComponent.openModal();
+    },
     getCoupons() {
       this.isLoading = true;
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupons`;
@@ -96,6 +108,16 @@ export default {
           this.$refs.couponModal.hideModal();
         });
       }
+    },
+    delCoupon() {
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
+      this.isLoading = true;
+      this.$http.delete(url).then((response) => {
+        console.log(response, this.tempCoupon);
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
+        this.getCoupons();
+      });
     },
   },
   created() {

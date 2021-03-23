@@ -27,13 +27,20 @@
           </td>
           <td class="text-right">{{ item.total }}</td>
           <td>
-            <strong v-if="item.is_paid" class="text-success">已付款</strong>
-            <span v-else class="text-muted">尚未起用</span>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" :id="`paidSwitch${item.id}`"
+                     v-model="item.is_paid"
+                     @change="updatePaid(item)">
+              <label class="form-check-label" :for="`paidSwitch${item.id}`">
+                <span v-if="item.is_paid">已付款</span>
+                <span v-else>未付款</span>
+              </label>
+            </div>
           </td>
           <td>
             <div class="btn-group">
               <button class="btn btn-outline-primary btn-sm"
-                      @click="openModal(false, item)">編輯</button>
+                      @click="openModal(false, item)">檢視</button>
               <button class="btn btn-outline-danger btn-sm"
                       @click="openDelOrderModal(item)"
               >刪除</button>
@@ -43,12 +50,15 @@
       </template>
     </tbody>
   </table>
+  <OrderModal :order="tempOrder"
+              ref="orderModal" @update-paid="updatePaid"></OrderModal>
   <DelModal :item="tempOrder" ref="delModal" @del-item="delOrder"></DelModal>
   <Pagination :pages="pagination" @emitPages="getOrders"></Pagination>
 </template>
 
 <script>
 import DelModal from '@/components/DelModal.vue';
+import OrderModal from '@/components/orderModal.vue';
 import Pagination from '../components/Pagination.vue';
 
 export default {
@@ -59,14 +69,17 @@ export default {
       pagination: {},
       isLoading: false,
       tempOrder: {},
+      currentPage: 1,
     };
   },
   components: {
     Pagination,
     DelModal,
+    OrderModal,
   },
   methods: {
     getOrders(currentPage = 1) {
+      this.currentPage = currentPage;
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/orders?page=${currentPage}`;
       this.isLoading = true;
       this.$http.get(url, this.tempProduct).then((response) => {
@@ -76,10 +89,28 @@ export default {
         console.log(response);
       });
     },
+    openModal(isNew, item) {
+      this.tempOrder = { ...item };
+      this.isNew = false;
+      const orderComponent = this.$refs.orderModal;
+      orderComponent.openModal();
+    },
     openDelOrderModal(item) {
       this.tempOrder = { ...item };
       const delComponent = this.$refs.delModal;
       delComponent.openModal();
+    },
+    updatePaid(item) {
+      this.isLoading = true;
+      const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`;
+      const paid = {
+        is_paid: item.is_paid,
+      };
+      this.$http.put(api, { data: paid }).then((response) => {
+        this.isLoading = false;
+        this.getOrders(this.currentPage);
+        this.$httpMessageState(response, '更新付款狀態');
+      });
     },
     delOrder() {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/order/${this.tempOrder.id}`;
@@ -88,7 +119,7 @@ export default {
         console.log(response);
         const delComponent = this.$refs.delModal;
         delComponent.hideModal();
-        this.getOrders();
+        this.getOrders(this.currentPage);
       });
     },
   },

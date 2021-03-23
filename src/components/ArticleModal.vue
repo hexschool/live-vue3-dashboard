@@ -40,10 +40,17 @@
             <div class="col-sm-8">
               <label for="tag" class="form-label">標籤</label>
               <div class="row gx-1 mb-3">
-                <div class="col-md-2 mb-1" v-for="(label, key) in tempArticle.tag" :key="key">
-                  <input type="text" class="form-control form-control-sm" id="tag"
-                         v-model="tempArticle.tag[key]"
-                         placeholder="請輸入標籤">
+                <div class="col-md-2 mb-1"
+                     v-for="(label, key) in tempArticle.tag" :key="key">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control" id="tag"
+                           v-model="tempArticle.tag[key]"
+                           placeholder="請輸入標籤">
+                    <button type="button" class="btn btn-outline-danger"
+                            @click="tempArticle.tag.splice(key, 1)">
+                      <i class="bi bi-x"></i>
+                    </button>
+                  </div>
                 </div>
                 <div class="col-md-2 mb-1"
                      v-if="tempArticle.tag[tempArticle.tag.length - 1] || !tempArticle.tag.length">
@@ -60,14 +67,13 @@
                           placeholder="請輸入文章描述"></textarea>
               </div>
               <div class="mb-3">
-                <ckeditor :editor="editor" v-model="tempArticle.content"></ckeditor>
+                <ckeditor :editor="editor" :config="editorConfig"
+                          v-model="tempArticle.content"></ckeditor>
               </div>
               <div class="mb-3">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox"
                          v-model="tempArticle.isPublic"
-                         :true-value="1"
-                         :false-value="0"
                          id="isPublic">
                   <label class="form-check-label" for="isPublic">
                     是否公開
@@ -109,15 +115,21 @@ export default {
         tag: [''],
       },
       create_at: 0,
+      // 參考：https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/frameworks/vuejs-v3.html#editor
       editor: ClassicEditor,
+      editorConfig: {
+        toolbar: ['heading', 'typing', 'bold', 'italic', '|', 'link'],
+      },
     };
   },
   mixins: [modalMixin],
   watch: {
     article() {
-      this.tempArticle = this.article;
-      this.tempArticle.tag = this.article.tag || [];
-      this.tempArticle.isPublic = this.article.isPublic || false;
+      this.tempArticle = {
+        ...this.article,
+        tag: this.article.tag || [],
+        isPublic: this.article.isPublic || false,
+      };
       [this.create_at] = new Date(this.tempArticle.create_at * 1000)
         .toISOString()
         .split('T');

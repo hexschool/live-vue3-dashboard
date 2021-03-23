@@ -17,6 +17,7 @@ const routes = [
   },
   {
     path: '/login',
+    name: 'Login',
     component: () => import('../views/Login.vue'),
   },
   // DashBoard Pages
@@ -47,8 +48,12 @@ const routes = [
     component: () => import('../views/Dashboard.vue'),
     children: [
       {
-        path: 'blog',
-        component: () => import('../views/UserBlog.vue'),
+        path: 'articles',
+        component: () => import('../views/UserArticles.vue'),
+      },
+      {
+        path: 'article/:articleId',
+        component: () => import('../views/UserArticle.vue'),
       },
       {
         path: 'cart',
@@ -59,6 +64,10 @@ const routes = [
         component: () => import('../views/UserCheckout.vue'),
       },
     ],
+  },
+  {
+    path: '/admin/:pathMatch(.*)*',
+    redirect: { name: 'Login' },
   },
 ];
 

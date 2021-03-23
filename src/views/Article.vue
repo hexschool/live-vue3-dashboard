@@ -10,12 +10,12 @@
     <table class="table mt-4">
       <thead>
         <tr>
-          <th>標題</th>
-          <th>作者</th>
+          <th style="width: 200px">標題</th>
+          <th style="width: 200px">作者</th>
           <th>描述</th>
-          <th>建立時間</th>
-          <th>是否公開</th>
-          <th>編輯</th>
+          <th style="width: 100px">建立時間</th>
+          <th style="width: 100px">是否公開</th>
+          <th style="width: 120px">編輯</th>
         </tr>
       </thead>
       <tbody>
@@ -23,7 +23,7 @@
           <td>{{ article.title }}</td>
           <td>{{ article.author }}</td>
           <td>{{ article.description }}</td>
-          <td>{{ article.create_at}}</td>
+          <td>{{ $filters.date(article.create_at) }}</td>
           <td>
             <span v-if="article.isPublic">已上架</span>
             <span v-else>未上架</span>
@@ -57,6 +57,7 @@ export default {
       isLoading: false,
       isNew: false,
       tempArticle: {},
+      currentPage: 1,
     };
   },
   inject: ['emitter'],
@@ -66,6 +67,7 @@ export default {
   },
   methods: {
     getArticles(page = 1) {
+      this.currentPage = page;
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/articles?page=${page}`;
       this.isLoading = true;
       this.$http.get(api).then((response) => {
@@ -75,12 +77,21 @@ export default {
           this.articles = response.data.articles;
           this.pagination = response.data.pagination;
         }
+      }).catch((error) => {
+        // axios 的錯誤狀態，可參考：https://github.com/axios/axios#handling-errors
+        console.log('error', error.response, error.request, error.message);
+        this.isLoading = false;
+        this.emitter.emit('push-message', {
+          title: '連線錯誤',
+          style: 'danger',
+          content: error.message,
+        });
       });
     },
     openModal(isNew, item) {
       if (isNew) {
         this.tempArticle = {
-          is_public: false,
+          isPublic: false,
           create_at: new Date().getTime() / 1000,
           tag: [],
         };
@@ -101,23 +112,9 @@ export default {
       }
       const articleComponent = this.$refs.articleModal;
       this.$http[httpMethod](api, { data: this.tempArticle }).then((response) => {
-        console.log(response);
-        if (response.data.success) {
-          this.emitter.emit('push-message', {
-            style: 'success',
-            title: response.data.message,
-          });
-          articleComponent.hideModal();
-          this.getArticles();
-        } else {
-          this.emitter.emit('push-message', {
-            style: 'danger',
-            title: '更新文章失敗',
-            content: response.data.message.join('、'),
-          });
-          articleComponent.hideModal();
-          this.getArticles();
-        }
+        this.$httpMessageState(response, '更新貼文');
+        articleComponent.hideModal();
+        this.getArticles(this.currentPage);
       });
     },
     openDelArticleModal(item) {
@@ -130,10 +127,10 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article/${this.tempArticle.id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
-        console.log(response, this.tempArticle);
+        this.$httpMessageState(response, '刪除貼文');
         const delComponent = this.$refs.delModal;
         delComponent.hideModal();
-        this.getArticles();
+        this.getArticles(this.currentPage);
       });
     },
   },

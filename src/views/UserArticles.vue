@@ -6,7 +6,12 @@
           <img :src="article.imageUrl" class="card-img-top">
           <div class="card-body">
             <h5 class="card-title">{{ article.title }}</h5>
-            <div v-html="article.content"></div>
+            <div v-html="article.description"></div>
+          </div>
+          <div class="card-footer">
+            <router-link :to="`/user/article/${article.id}`" class="btn btn-outline-primary">
+              文章頁面
+            </router-link>
           </div>
         </div>
       </div>

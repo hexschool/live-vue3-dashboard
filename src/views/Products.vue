@@ -72,6 +72,7 @@ export default {
         editModal: '',
         delModal: '',
       },
+      currentPage: 1,
     };
   },
   components: {
@@ -82,6 +83,7 @@ export default {
   inject: ['emitter'],
   methods: {
     getProducts(page = 1) {
+      this.currentPage = page;
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
       this.isLoading = true;
       this.$http.get(api).then((response) => {
@@ -115,22 +117,9 @@ export default {
       const productComponent = this.$refs.productModal;
       this.$http[httpMethod](api, { data: this.tempProduct }).then((response) => {
         console.log(response);
-        if (response.data.success) {
-          this.emitter.emit('push-message', {
-            style: 'success',
-            title: '更新產品成功',
-          });
-          productComponent.hideModal();
-          this.getProducts();
-        } else {
-          this.emitter.emit('push-message', {
-            style: 'danger',
-            title: '更新產品失敗',
-            content: response.data.message.join('、'),
-          });
-          productComponent.hideModal();
-          this.getProducts();
-        }
+        this.$httpMessageState(response, '更新產品');
+        productComponent.hideModal();
+        this.getProducts(this.currentPage);
       });
     },
     openDelProductModal(item) {
@@ -142,10 +131,10 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
-        console.log(response, this.tempProduct);
+        this.$httpMessageState(response, '刪除產品');
         const delComponent = this.$refs.delModal;
         delComponent.hideModal();
-        this.getProducts();
+        this.getProducts(this.currentPage);
       });
     },
   },

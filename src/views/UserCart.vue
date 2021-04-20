@@ -2,8 +2,8 @@
   <div class="container">
     <div class="row mt-4">
       <!-- 產品列表 -->
-      <userProductModal ref="userProductModal" :product="product"
-                        @add-to-cart="addToCart"></userProductModal>
+      <UserProductModal ref="userProductModal" :product="product"
+                        @add-to-cart="addToCart"></UserProductModal>
       <div class="col-md-7">
         <table class="table align-middle">
           <thead>
@@ -162,7 +162,7 @@
 </template>
 
 <script>
-import userProductModal from '@/components/userProductModal.vue';
+import UserProductModal from '@/components/UserProductModal.vue';
 
 export default {
   data() {
@@ -187,7 +187,7 @@ export default {
     };
   },
   components: {
-    userProductModal,
+    UserProductModal,
   },
   methods: {
     getProducts() {

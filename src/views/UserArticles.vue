@@ -42,9 +42,6 @@ export default {
         }
       });
     },
-    getArticle() {
-      //
-    },
   },
   created() {
     this.getArticles();

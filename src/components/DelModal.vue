@@ -29,7 +29,6 @@
 import Modal from 'bootstrap/js/dist/modal';
 
 export default {
-  name: 'delModal',
   props: {
     item: {},
   },

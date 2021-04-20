@@ -25,7 +25,6 @@
 </template>
 <script>
 export default {
-  name: 'Navbar',
   inject: ['emitter'],
   methods: {
     logout() {

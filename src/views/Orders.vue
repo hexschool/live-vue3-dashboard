@@ -40,7 +40,7 @@
           <td>
             <div class="btn-group">
               <button class="btn btn-outline-primary btn-sm"
-                      @click="openModal(false, item)">檢視</button>
+                      @click="openModal(item)">檢視</button>
               <button class="btn btn-outline-danger btn-sm"
                       @click="openDelOrderModal(item)"
               >刪除</button>
@@ -58,8 +58,8 @@
 
 <script>
 import DelModal from '@/components/DelModal.vue';
-import OrderModal from '@/components/orderModal.vue';
-import Pagination from '../components/Pagination.vue';
+import OrderModal from '@/components/OrderModal.vue';
+import Pagination from '@/components/Pagination.vue';
 
 export default {
   data() {
@@ -89,7 +89,7 @@ export default {
         console.log(response);
       });
     },
-    openModal(isNew, item) {
+    openModal(item) {
       this.tempOrder = { ...item };
       this.isNew = false;
       const orderComponent = this.$refs.orderModal;

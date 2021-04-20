@@ -43,7 +43,6 @@
 import modalMixin from '@/mixins/modalMixin';
 
 export default {
-  name: 'productModal',
   props: {
     product: {
       type: Object,

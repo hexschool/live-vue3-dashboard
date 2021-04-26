@@ -12,11 +12,9 @@
           <router-link to="/admin/products" class="nav-link">產品</router-link>
           <router-link to="/admin/orders" class="nav-link">訂單</router-link>
           <router-link to="/admin/coupons" class="nav-link">優惠券</router-link>
-          <router-link to="/admin/article" class="nav-link">貼文</router-link>
           <a href="#" @click.prevent="logout" class="nav-link">登出</a>
         </div>
         <div class="navbar-nav ms-auto">
-          <router-link to="/user/articles" class="nav-link">Blog</router-link>
           <router-link to="/user/cart" class="nav-link">購物車</router-link>
         </div>
       </div>
@@ -25,14 +23,12 @@
 </template>
 <script>
 export default {
-  inject: ['emitter'],
+  inject: ['emitter', '$httpMessageState'],
   methods: {
     logout() {
       const api = `${process.env.VUE_APP_API}/logout`;
       this.$http.post(api)
         .then((response) => {
-          console.log(response);
-          this.$httpMessageState(response, '登出');
           if (response.data.success) {
             this.$router.push('/login');
           }

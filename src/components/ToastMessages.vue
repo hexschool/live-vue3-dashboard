@@ -1,26 +1,51 @@
 <template>
-  <div class="toast-container position-absolute pe-3 top-0 end-0">
-    <Toast v-for="(msg, key) in messages" :key="key"
-      :msg="msg"
-    />
+  <div class="toast-container position-absolute pe-3 top-0 end-0" style="z-index: 1500;">
+    <div
+      v-for="(msg, key) in messages"
+      :key="key"
+      class="toast show"
+      role="alert"
+    >
+      <div class="toast-header">
+        <span
+          :class="`bg-${msg.style}`"
+          class="p-2 rounded me-2 d-inline-block"
+        ></span>
+        <strong class="me-auto">{{ msg.title }}</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="toast-body" v-if="msg.content">
+        {{ msg.content }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Toast from '@/components/Toast.vue';
-
 export default {
-  components: { Toast },
   data() {
     return {
       messages: [],
     };
   },
   inject: ['emitter'],
+  methods: {
+    toastShow() {
+      setTimeout(() => {
+        this.messages.shift();
+      }, 6000);
+    },
+  },
   mounted() {
     this.emitter.on('push-message', (message) => {
       const { style = 'success', title, content } = message;
       this.messages.push({ style, title, content });
+      this.toastShow();
     });
   },
 };

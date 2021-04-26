@@ -8,6 +8,7 @@
 
 <script>
 import emitter from '@/methods/eventBus';
+import $httpMessageState from '@/methods/pushMessageState';
 import ToastMessages from '@/components/ToastMessages.vue';
 import Navbar from '@/components/Navbar.vue';
 
@@ -16,6 +17,7 @@ export default {
   provide() {
     return {
       emitter,
+      $httpMessageState,
     };
   },
   created() {
@@ -24,8 +26,6 @@ export default {
     const api = `${process.env.VUE_APP_API}/api/user/check`;
     this.$http.post(api)
       .then((response) => {
-        console.log(response);
-        this.$httpMessageState(response, '登入');
         if (!response.data.success) {
           this.$router.push('/login');
         }

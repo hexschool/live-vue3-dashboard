@@ -37,24 +37,12 @@ const routes = [
         path: 'coupons',
         component: () => import('../views/Coupons.vue'),
       },
-      {
-        path: 'article',
-        component: () => import('../views/Article.vue'),
-      },
     ],
   },
   {
     path: '/user',
     component: () => import('../views/Dashboard.vue'),
     children: [
-      {
-        path: 'articles',
-        component: () => import('../views/UserArticles.vue'),
-      },
-      {
-        path: 'article/:articleId',
-        component: () => import('../views/UserArticle.vue'),
-      },
       {
         path: 'cart',
         component: () => import('../views/UserCart.vue'),

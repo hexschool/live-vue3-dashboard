@@ -73,7 +73,6 @@ export default {
       this.isLoading = true;
       this.$http.get(url).then((response) => {
         this.order = response.data.order;
-        console.log(response);
         this.isLoading = false;
       });
     },
@@ -81,7 +80,6 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/pay/${this.orderId}`;
       this.isLoading = true;
       this.$http.post(url).then((response) => {
-        console.log(response);
         if (response.data.success) {
           this.getOrder();
         }
@@ -92,7 +90,6 @@ export default {
   created() {
     this.orderId = this.$route.params.orderId;
     this.getOrder();
-    console.log(this.orderId);
   },
 };
 </script>

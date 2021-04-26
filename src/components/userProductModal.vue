@@ -27,7 +27,7 @@
                   <input type="number" class="form-control"
                          v-model.number="qty">
                   <button type="button" class="btn btn-primary"
-                          @click="$emit('add-to-cart', tempProduct.id, qty)">加入購物車</button>
+                          @click="addToCart">加入購物車</button>
                 </div>
 
               </div>
@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-import modalMixin from '@/mixins/modalMixin';
+import Modal from 'bootstrap/js/dist/modal';
 
 export default {
   props: {
@@ -58,7 +58,6 @@ export default {
       qty: 1,
     };
   },
-  mixins: [modalMixin],
   inject: ['emitter'],
   watch: {
     product() {
@@ -77,7 +76,6 @@ export default {
           'Content-Type': 'multipart/form-data',
         },
       }).then((response) => {
-        console.log(response.data);
         this.status.fileUploading = false;
         if (response.data.success) {
           this.tempProduct.imageUrl = response.data.imageUrl;
@@ -94,6 +92,18 @@ export default {
         }
       });
     },
+    addToCart() {
+      this.$emit('addToCart', this.tempProduct.id, this.qty);
+    },
+    openModal() {
+      this.modal.show();
+    },
+    hideModal() {
+      this.modal.hide();
+    },
+  },
+  mounted() {
+    this.modal = new Modal(this.$refs.modal);
   },
 };
 </script>

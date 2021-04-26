@@ -95,7 +95,7 @@
   </div>
 </template>
 <script>
-import modalMixin from '@/mixins/modalMixin';
+import Modal from 'bootstrap/js/dist/modal';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
@@ -122,7 +122,6 @@ export default {
       },
     };
   },
-  mixins: [modalMixin],
   watch: {
     article() {
       this.tempArticle = {
@@ -139,6 +138,15 @@ export default {
     },
   },
   methods: {
+    openModal() {
+      this.modal.show();
+    },
+    hideModal() {
+      this.modal.hide();
+    },
+  },
+  mounted() {
+    this.modal = new Modal(this.$refs.modal);
   },
 };
 </script>

@@ -1,9 +1,6 @@
 <template>
   <div class="container">
     <div class="row mt-4">
-      <!-- 產品列表 -->
-      <UserProductModal ref="userProductModal" :product="product"
-                        @add-to-cart="addToCart"></UserProductModal>
       <div class="col-md-7">
         <table class="table align-middle">
           <thead>
@@ -20,7 +17,7 @@
               <div style="height: 100px; background-size: cover; background-position: center"
                    :style="{backgroundImage: `url(${item.imageUrl})`}"></div>
             </td>
-            <td><a href="#" class="text-dark">{{ item.title }}</a></td>
+            <td><h6 href="#" class="text-dark">{{ item.title }}</h6></td>
             <td>
               <div class="h5" v-if="!item.price">{{ item.origin_price }} 元</div>
               <del class="h6" v-if="item.price">原價 {{ item.origin_price }} 元</del>
@@ -30,7 +27,8 @@
               <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-outline-secondary"
                         @click="getProduct(item.id)">
-                  <i class="fas fa-spinner fa-spin" v-if="status.loadingItem === item.id"></i>
+                  <span class="spinner-border spinner-grow-sm"
+                      v-if="status.loadingItem === item.id"></span>
                   查看更多
                 </button>
                 <button type="button" class="btn btn-outline-danger"
@@ -47,7 +45,7 @@
         </table>
       </div>
       <!-- 購物車列表 -->
-      <div class="col-md-5 sticky-top">
+      <div class="col-md-5">
         <table class="table align-middle">
           <thead>
             <tr>
@@ -158,6 +156,9 @@
         </div>
       </Form>
     </div>
+    <!-- 產品列表 -->
+    <UserProductModal ref="userProductModal" :product="product"
+                      @addToCart="addToCart"></UserProductModal>
   </div>
 </template>
 
@@ -189,13 +190,13 @@ export default {
   components: {
     UserProductModal,
   },
+  inject: ['emitter', '$httpMessageState'],
   methods: {
     getProducts() {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products`;
       this.isLoading = true;
       this.$http.get(url).then((response) => {
         this.products = response.data.products;
-        console.log(response);
         this.isLoading = false;
       });
     },
@@ -204,7 +205,6 @@ export default {
       this.status.loadingItem = id;
       this.$http.get(url).then((response) => {
         this.product = response.data.product;
-        console.log(response);
         this.status.loadingItem = '';
         this.$refs.userProductModal.openModal();
       });
@@ -228,7 +228,6 @@ export default {
       this.isLoading = true;
       this.$http.get(url).then((response) => {
         this.cart = response.data.data;
-        console.log(response);
         this.isLoading = false;
       });
     },

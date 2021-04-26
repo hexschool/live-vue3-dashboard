@@ -80,14 +80,13 @@ export default {
     DelModal,
     Pagination,
   },
-  inject: ['emitter'],
+  inject: ['emitter', '$httpMessageState'],
   methods: {
     getProducts(page = 1) {
       this.currentPage = page;
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
       this.isLoading = true;
       this.$http.get(api).then((response) => {
-        console.log(response.data);
         if (response.data.success) {
           this.isLoading = false;
           this.products = response.data.products;
@@ -116,7 +115,6 @@ export default {
       }
       const productComponent = this.$refs.productModal;
       this.$http[httpMethod](api, { data: this.tempProduct }).then((response) => {
-        console.log(response);
         this.$httpMessageState(response, '更新產品');
         productComponent.hideModal();
         this.getProducts(this.currentPage);

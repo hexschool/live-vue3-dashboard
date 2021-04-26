@@ -24,7 +24,6 @@ export default {
     const api = `${process.env.VUE_APP_API}/api/user/check`;
     this.$http.post(api)
       .then((response) => {
-        console.log(response);
         this.$httpMessageState(response, '登入');
         if (!response.data.success) {
           this.$router.push('/login');

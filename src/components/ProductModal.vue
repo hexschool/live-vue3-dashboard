@@ -164,7 +164,6 @@ export default {
           'Content-Type': 'multipart/form-data',
         },
       }).then((response) => {
-        console.log(response.data);
         this.status.fileUploading = false;
         if (response.data.success) {
           this.tempProduct.imageUrl = response.data.imageUrl;

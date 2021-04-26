@@ -71,7 +71,6 @@ export default {
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/articles?page=${page}`;
       this.isLoading = true;
       this.$http.get(api).then((response) => {
-        console.log(response.data);
         this.isLoading = false;
         if (response.data.success) {
           this.articles = response.data.articles;
@@ -119,7 +118,6 @@ export default {
     },
     openDelArticleModal(item) {
       this.tempArticle = { ...item };
-      console.log(this.tempArticle);
       const delComponent = this.$refs.delModal;
       delComponent.openModal();
     },

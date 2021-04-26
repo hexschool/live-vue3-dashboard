@@ -29,8 +29,10 @@
             <td>
               <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-outline-secondary"
+                        :disabled="status.loadingItem === item.id"
                         @click="getProduct(item.id)">
-                  <i class="fas fa-spinner fa-spin" v-if="status.loadingItem === item.id"></i>
+                  <span class="spinner-border spinner-grow-sm"
+                      v-if="status.loadingItem === item.id"></span>
                   查看更多
                 </button>
                 <button type="button" class="btn btn-outline-danger"
@@ -195,7 +197,6 @@ export default {
       this.isLoading = true;
       this.$http.get(url).then((response) => {
         this.products = response.data.products;
-        console.log(response);
         this.isLoading = false;
       });
     },
@@ -204,7 +205,6 @@ export default {
       this.status.loadingItem = id;
       this.$http.get(url).then((response) => {
         this.product = response.data.product;
-        console.log(response);
         this.status.loadingItem = '';
         this.$refs.userProductModal.openModal();
       });
@@ -228,7 +228,6 @@ export default {
       this.isLoading = true;
       this.$http.get(url).then((response) => {
         this.cart = response.data.data;
-        console.log(response);
         this.isLoading = false;
       });
     },

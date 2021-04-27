@@ -29,7 +29,7 @@
             <td>
               <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-outline-secondary"
-                        :disabled="status.loadingItem === item.id"
+                        :disabled="status.loadingItem === item.id || !item.is_enabled"
                         @click="getProduct(item.id)">
                   <span class="spinner-border spinner-grow-sm"
                       v-if="status.loadingItem === item.id"></span>
@@ -37,7 +37,7 @@
                 </button>
                 <button type="button" class="btn btn-outline-danger"
                         @click="addToCart(item.id)"
-                        :disabled="status.loadingItem === item.id">
+                        :disabled="status.loadingItem === item.id || !item.is_enabled">
                   <span class="spinner-border spinner-grow-sm"
                       v-if="status.loadingItem === item.id"></span>
                   加到購物車

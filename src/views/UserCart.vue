@@ -26,14 +26,15 @@
             <td>
               <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-outline-secondary"
-                        @click="getProduct(item.id)">
+                        @click="getProduct(item.id)"
+                        :disabled="status.loadingItem === item.id || !item.is_enabled">
                   <span class="spinner-border spinner-grow-sm"
                       v-if="status.loadingItem === item.id"></span>
                   查看更多
                 </button>
                 <button type="button" class="btn btn-outline-danger"
                         @click="addToCart(item.id)"
-                        :disabled="status.loadingItem === item.id">
+                        :disabled="status.loadingItem === item.id || !item.is_enabled">
                   <span class="spinner-border spinner-grow-sm"
                       v-if="status.loadingItem === item.id"></span>
                   加到購物車

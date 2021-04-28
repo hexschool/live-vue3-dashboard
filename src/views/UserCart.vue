@@ -109,7 +109,7 @@
     </div>
 
     <div class="my-5 row justify-content-center">
-      <Form class="col-md-6" v-slot="{ errors }"
+      <Form ref="form" class="col-md-6" v-slot="{ errors }"
             @submit="createOrder">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
@@ -264,6 +264,7 @@ export default {
           this.$router.push(`/user/checkout/${response.data.orderId}`);
         }
         this.isLoading = false;
+        this.$refs.form.resetForm();
       });
     },
   },

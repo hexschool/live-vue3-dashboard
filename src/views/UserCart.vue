@@ -112,7 +112,7 @@
     </div>
 
     <div class="my-5 row justify-content-center">
-      <Form class="col-md-6" v-slot="{ errors }"
+      <Form ref="form" class="col-md-6" v-slot="{ errors }"
             @submit="createOrder">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
@@ -261,6 +261,7 @@ export default {
         this.$httpMessageState(response, '建立訂單');
         if (response.data.success) {
           this.$router.push(`/user/checkout/${response.data.orderId}`);
+          this.$refs.form.resetForm();
         }
         this.isLoading = false;
       });

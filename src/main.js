@@ -32,6 +32,7 @@ configure({
 setLocale('zh_TW');
 
 const app = createApp(App);
+
 app.config.globalProperties.$filters = {
   date,
   currency,

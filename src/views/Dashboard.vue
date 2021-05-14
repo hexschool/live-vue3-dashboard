@@ -1,32 +1,33 @@
 <template>
   <Navbar/>
   <div class="container-fluid mt-3 position-relative">
-    <ToastMessages></ToastMessages>
-    <router-view/>
+    <router-view v-if="status"/>
   </div>
 </template>
 
 <script>
-import emitter from '@/methods/eventBus';
-import $httpMessageState from '@/methods/pushMessageState';
-import ToastMessages from '@/components/ToastMessages.vue';
 import Navbar from '@/components/Navbar.vue';
 
 export default {
-  components: { Navbar, ToastMessages },
-  provide() {
+  components: { Navbar },
+  data() {
     return {
-      emitter,
-      $httpMessageState,
+      status: false,
     };
   },
+  inject: ['emitter', '$httpMessageState'],
   created() {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
-    this.$http.defaults.headers.common.Authorization = `${token}`;
+
+    this.$http.defaults.headers.common.Authorization = token;
+
     const api = `${process.env.VUE_APP_API}/api/user/check`;
     this.$http.post(api)
       .then((response) => {
-        if (!response.data.success) {
+        if (response.data.success) {
+          this.status = true;
+        } else {
+          this.$httpMessageState(response, '登入結果');
           this.$router.push('/login');
         }
       });

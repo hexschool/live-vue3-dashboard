@@ -27,6 +27,7 @@ export default {
       user: {},
     };
   },
+  inject: ['emitter', '$httpMessageState'],
   methods: {
     signIn() {
       const api = `${process.env.VUE_APP_API}/admin/signin`;
@@ -34,7 +35,10 @@ export default {
         if (response.data.success) {
           const { token, expired } = response.data;
           document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
+          this.$httpMessageState(response, '登入結果');
           this.$router.push('/admin/products');
+        } else {
+          this.$httpMessageState(response, '登入結果');
         }
       });
     },

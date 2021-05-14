@@ -2,8 +2,7 @@
   <div>
     <Loading :active="isLoading"></Loading>
     <div class="text-end mt-4">
-      <button class="btn btn-primary"
-              @click="openModal(true)">
+      <button class="btn btn-primary" type="button" @click="openModal(true)">
         建立新的頁面
       </button>
     </div>
@@ -30,19 +29,31 @@
           </td>
           <td>
             <div class="btn-group">
-              <button class="btn btn-outline-primary btn-sm"
-                      @click="openModal(false, article)">編輯</button>
-              <button class="btn btn-outline-danger btn-sm"
-                      @click="openDelArticleModal(article)"
-              >刪除</button>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                type="button"
+                @click="openModal(false, article)"
+              >
+                編輯
+              </button>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                type="button"
+                @click="openDelArticleModal(article)"
+              >
+                刪除
+              </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <ArticleModal ref="articleModal"
-                  :article="tempArticle" @update-article="updateArticle"></ArticleModal>
-    <DelModal :item="tempArticle" ref="delModal" @del-item="delArticle"/>
+    <ArticleModal
+      ref="articleModal"
+      :article="tempArticle"
+      @update-article="updateArticle"
+    ></ArticleModal>
+    <DelModal :item="tempArticle" ref="delModal" @del-item="delArticle" />
   </div>
 </template>
 

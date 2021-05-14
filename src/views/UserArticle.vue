@@ -33,10 +33,10 @@ export default {
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/article/${this.id}`;
       this.isLoading = true;
       this.$http.get(api).then((response) => {
-        this.isLoading = false;
         if (response.data.success) {
           this.article = response.data.article;
         }
+        this.isLoading = false;
       });
     },
   },

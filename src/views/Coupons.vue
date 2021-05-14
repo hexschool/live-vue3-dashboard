@@ -2,7 +2,7 @@
   <div>
     <Loading :active="isLoading"></Loading>
     <div class="text-end mt-4">
-      <button class="btn btn-primary" @click="openCouponModal(true)">
+      <button class="btn btn-primary" type="button" @click="openCouponModal(true)">
         建立新的優惠券
       </button>
     </div>
@@ -38,7 +38,7 @@
       </tr>
       </tbody>
     </table>
-    <couponModal :coupon="tempCoupon" ref="couponModal"
+    <CouponModal :coupon="tempCoupon" ref="couponModal"
     @update-coupon="updateCoupon"/>
     <DelModal :item="tempCoupon" ref="delModal" @del-item="delCoupon"/>
   </div>

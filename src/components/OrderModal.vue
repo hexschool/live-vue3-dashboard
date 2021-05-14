@@ -45,7 +45,7 @@
                   </tr>
                   <tr>
                     <th>下單時間</th>
-                    <td>{{ $filters.date(tempOrder.create_at)}}</td>
+                    <td>{{ $filters.date(tempOrder.create_at) }}</td>
                   </tr>
                   <tr>
                     <th>付款時間</th>

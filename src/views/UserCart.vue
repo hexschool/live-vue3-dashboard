@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Loading :active="isLoading"></Loading>
     <div class="row mt-4">
       <!-- 產品列表 -->
       <div class="col-md-7">
@@ -75,7 +76,7 @@
         </table>
       </div>
       <!-- 購物車列表 -->
-      <div class="col-md-5 sticky-top">
+      <div class="col-md-5">
         <table class="table align-middle">
           <thead>
             <tr>
@@ -110,6 +111,7 @@
                       type="number"
                       class="form-control"
                       v-model.number="item.qty"
+                      @blur="updateCart(item)"
                     />
                     <div class="input-group-text">
                       / {{ item.product.unit }}
@@ -282,6 +284,7 @@ export default {
       this.$router.push(`/user/product/${id}`);
     },
     addToCart(id, qty = 1) {
+      this.isLoading = true;
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
       this.status.loadingItem = id;
       const cart = {
@@ -292,6 +295,7 @@ export default {
       this.$http.post(url, { data: cart }).then((response) => {
         this.$httpMessageState(response, '加入購物車');
         this.status.loadingItem = '';
+        this.isLoading = false;
         this.getCart();
       });
     },
@@ -314,6 +318,20 @@ export default {
         this.isLoading = false;
       });
     },
+    updateCart(data) {
+      this.isLoading = true;
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${data.id}`;
+      const cart = {
+        product_id: data.product_id,
+        qty: data.qty,
+      };
+
+      this.$http.put(url, { data: cart }).then((response) => {
+        this.$httpMessageState(response, '更新購物車');
+        this.isLoading = false;
+        this.getCart();
+      });
+    },
     addCouponCode() {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/coupon`;
       const coupon = {
@@ -327,6 +345,7 @@ export default {
       });
     },
     createOrder() {
+      this.isLoading = true;
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/order`;
       const order = this.form;
       this.$http.post(url, { data: order }).then((response) => {

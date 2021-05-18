@@ -122,15 +122,21 @@ export default {
       this.tempProduct = item;
       let api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product`;
       let httpMethod = 'post';
+      let status = '新增產品';
       if (!this.isNew) {
         api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
         httpMethod = 'put';
+        status = '更新產品';
       }
       const productComponent = this.$refs.productModal;
       this.$http[httpMethod](api, { data: this.tempProduct }).then((response) => {
-        this.$httpMessageState(response, '更新產品');
-        productComponent.hideModal();
-        this.getProducts(this.currentPage);
+        if (response.data.success) {
+          this.$httpMessageState(response, status);
+          productComponent.hideModal();
+          this.getProducts(this.currentPage);
+        } else {
+          this.$httpMessageState(response, status);
+        }
       });
     },
     openDelProductModal(item) {

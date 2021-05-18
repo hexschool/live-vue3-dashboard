@@ -1,9 +1,13 @@
 <template>
-  <div class="toast-container position-absolute pe-3 top-0 end-0" style="z-index: 1050;">
+  <div
+    class="toast-container position-absolute pe-3 top-0 end-0"
+    style="z-index: 1050"
+  >
     <div
       v-for="(msg, key) in messages"
       :key="key"
       class="toast show"
+      :class="`toast${key}`"
       role="alert"
     >
       <div class="toast-header">
@@ -15,7 +19,7 @@
         <button
           type="button"
           class="btn-close"
-          data-bs-dismiss="toast"
+          @click="clearToast"
           aria-label="Close"
         ></button>
       </div>
@@ -39,6 +43,9 @@ export default {
       setTimeout(() => {
         this.messages.shift();
       }, 6000);
+    },
+    clearToast() {
+      this.messages.shift();
     },
   },
   mounted() {

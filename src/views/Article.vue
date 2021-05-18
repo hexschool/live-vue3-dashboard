@@ -32,7 +32,7 @@
               <button
                 class="btn btn-outline-primary btn-sm"
                 type="button"
-                @click="openModal(false, article)"
+                @click="getArticle(article.id)"
               >
                 編輯
               </button>
@@ -98,6 +98,26 @@ export default {
         });
       });
     },
+    getArticle(id) {
+      const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article/${id}`;
+      this.isLoading = true;
+      this.$http.get(api).then((response) => {
+        this.isLoading = false;
+        if (response.data.success) {
+          this.openModal(false, response.data.article);
+          this.isNew = false;
+        }
+      }).catch((error) => {
+        // axios 的錯誤狀態，可參考：https://github.com/axios/axios#handling-errors
+        console.log('error', error.response, error.request, error.message);
+        this.isLoading = false;
+        this.emitter.emit('push-message', {
+          title: '連線錯誤',
+          style: 'danger',
+          content: error.message,
+        });
+      });
+    },
     openModal(isNew, item) {
       if (isNew) {
         this.tempArticle = {
@@ -116,15 +136,21 @@ export default {
       this.tempArticle = item;
       let api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article`;
       let httpMethod = 'post';
+      let status = '新增貼文';
       if (!this.isNew) {
         api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article/${this.tempArticle.id}`;
         httpMethod = 'put';
+        status = '更新貼文';
       }
       const articleComponent = this.$refs.articleModal;
       this.$http[httpMethod](api, { data: this.tempArticle }).then((response) => {
-        this.$httpMessageState(response, '更新貼文');
-        articleComponent.hideModal();
-        this.getArticles(this.currentPage);
+        if (response.data.success) {
+          this.$httpMessageState(response, status);
+          articleComponent.hideModal();
+          this.getArticles(this.currentPage);
+        } else {
+          this.$httpMessageState(response, status);
+        }
       });
     },
     openDelArticleModal(item) {
@@ -136,10 +162,14 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article/${this.tempArticle.id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
-        this.$httpMessageState(response, '刪除貼文');
-        const delComponent = this.$refs.delModal;
-        delComponent.hideModal();
-        this.getArticles(this.currentPage);
+        if (response.data.success) {
+          this.$httpMessageState(response, '刪除貼文');
+          const delComponent = this.$refs.delModal;
+          delComponent.hideModal();
+          this.getArticles(this.currentPage);
+        } else {
+          this.$httpMessageState(response, '刪除貼文');
+        }
       });
     },
   },

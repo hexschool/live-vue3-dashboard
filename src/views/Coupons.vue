@@ -23,7 +23,7 @@
         <td>{{ $filters.date(item.due_date) }}</td>
         <td>
           <span v-if="item.is_enabled === 1" class="text-success">啟用</span>
-          <span v-else class="text-muted">未起用</span>
+          <span v-else class="text-muted">未啟用</span>
         </td>
         <td>
           <div class="btn-group">
@@ -38,7 +38,7 @@
       </tr>
       </tbody>
     </table>
-    <CouponModal :coupon="tempCoupon" ref="couponModal"
+    <CouponModal :coupon="tempCoupon" :is-new="isNew" ref="couponModal"
     @update-coupon="updateCoupon"/>
     <DelModal :item="tempCoupon" ref="delModal" @del-item="delCoupon"/>
   </div>

@@ -110,6 +110,7 @@
                     <input
                       type="number"
                       class="form-control"
+                      min="1"
                       v-model.number="item.qty"
                       @blur="updateCart(item)"
                     />

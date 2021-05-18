@@ -51,6 +51,7 @@
                   @change="uploadFile"
                 />
               </div>
+              <img class="img-fluid" :src="tempProduct.imageUrl" />
               <!-- 延伸技巧，多圖 -->
               <div class="mt-5" v-if="tempProduct.imagesUrl">
                 <div
@@ -133,6 +134,7 @@
                     type="number"
                     class="form-control"
                     id="origin_price"
+                    min="0"
                     v-model.number="tempProduct.origin_price"
                     placeholder="請輸入原價"
                   />
@@ -143,6 +145,7 @@
                     type="number"
                     class="form-control"
                     id="price"
+                    min="0"
                     v-model.number="tempProduct.price"
                     placeholder="請輸入售價"
                   />

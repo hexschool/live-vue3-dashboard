@@ -124,15 +124,21 @@ export default {
       this.tempProduct = item;
       let api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product`;
       let httpMethod = 'post';
+      let stauts = '新增產品';
       if (!this.isNew) {
         api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
         httpMethod = 'put';
+        stauts = '更新產品';
       }
       const productComponent = this.$refs.productModal;
       this.$http[httpMethod](api, { data: this.tempProduct }).then((response) => {
-        this.$httpMessageState(response, '更新產品');
-        productComponent.hideModal();
-        this.getProducts(this.currentPage);
+        if (response.data.success) {
+          this.$httpMessageState(response, stauts);
+          productComponent.hideModal();
+          this.getProducts(this.currentPage);
+        } else {
+          this.$httpMessageState(response, stauts);
+        }
       });
     },
     openDelProductModal(item) {
@@ -144,10 +150,14 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
-        this.$httpMessageState(response, '刪除產品');
-        const delComponent = this.$refs.delModal;
-        delComponent.hideModal();
-        this.getProducts(this.currentPage);
+        if (response.data.success) {
+          this.$httpMessageState(response, '刪除產品');
+          const delComponent = this.$refs.delModal;
+          delComponent.hideModal();
+          this.getProducts(this.currentPage);
+        } else {
+          this.$httpMessageState(response, '刪除產品');
+        }
       });
     },
   },

@@ -15,7 +15,7 @@
         <button
           type="button"
           class="btn-close"
-          data-bs-dismiss="toast"
+          @click="clearToast"
           aria-label="Close"
         ></button>
       </div>
@@ -39,6 +39,9 @@ export default {
       setTimeout(() => {
         this.messages.shift();
       }, 6000);
+    },
+    clearToast() {
+      this.messages.shift();
     },
   },
   mounted() {

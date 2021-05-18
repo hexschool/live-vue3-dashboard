@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Loading :active="isLoading"></Loading>
     <div class="row mt-4">
       <div class="col-md-7">
         <table class="table align-middle">
@@ -108,6 +109,8 @@
                     <input
                       type="number"
                       class="form-control"
+                      @blur="updateCart(item)"
+                      min="1"
                       v-model.number="item.qty"
                     />
                     <div class="input-group-text">
@@ -280,6 +283,7 @@ export default {
       this.$router.push(`/user/product/${id}`);
     },
     addToCart(id, qty = 1) {
+      this.isLoading = true;
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
       this.status.loadingItem = id;
       const cart = {
@@ -289,6 +293,20 @@ export default {
       this.$http.post(url, { data: cart }).then((response) => {
         this.$httpMessageState(response, '加入購物車');
         this.status.loadingItem = '';
+        this.isLoading = false;
+        this.getCart();
+      });
+    },
+    updateCart(data) {
+      this.isLoading = true;
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${data.id}`;
+      const cart = {
+        product_id: data.product_id,
+        qty: data.qty,
+      };
+      this.$http.put(url, { data: cart }).then((response) => {
+        this.$httpMessageState(response, '更新購物車');
+        this.isLoading = false;
         this.getCart();
       });
     },
@@ -307,8 +325,8 @@ export default {
       this.$http.delete(url).then((response) => {
         this.$httpMessageState(response, '移除購物車品項');
         this.status.loadingItem = '';
-        this.getCart();
         this.isLoading = false;
+        this.getCart();
       });
     },
     addCouponCode() {
@@ -319,8 +337,8 @@ export default {
       this.isLoading = true;
       this.$http.post(url, { data: coupon }).then((response) => {
         this.$httpMessageState(response, '加入優惠券');
-        this.getCart();
         this.isLoading = false;
+        this.getCart();
       });
     },
     createOrder() {

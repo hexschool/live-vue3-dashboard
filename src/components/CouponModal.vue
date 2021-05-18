@@ -4,7 +4,10 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">
+            <span v-if="isNew">新增優惠卷</span>
+            <span v-else>編輯優惠卷</span>
+          </h5>
           <button type="button" class="btn-close"
                   data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -56,7 +59,16 @@ import Modal from 'bootstrap/js/dist/modal';
 
 export default {
   props: {
-    coupon: {},
+    coupon: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    isNew: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {

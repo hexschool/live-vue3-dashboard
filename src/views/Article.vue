@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loading :active="isLoading"></Loading>
+    <Loading :active="isLoading" :z-index="1060"></Loading>
     <div class="text-end mt-4">
       <button class="btn btn-primary" type="button" @click="openModal(true)">
         建立新的頁面
@@ -51,6 +51,7 @@
     <ArticleModal
       ref="articleModal"
       :article="tempArticle"
+      :is-new="isNew"
       @update-article="updateArticle"
     ></ArticleModal>
     <DelModal :item="tempArticle" ref="delModal" @del-item="delArticle" />

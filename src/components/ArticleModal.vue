@@ -170,6 +170,10 @@ export default {
         return {};
       },
     },
+    isNew: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {

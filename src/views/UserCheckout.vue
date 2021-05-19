@@ -1,5 +1,5 @@
 <template>
-  <Loading :active="isLoading"></Loading>
+  <Loading :active="isLoading" :z-index="1060"></Loading>
   <div class="my-5 row justify-content-center">
     <form class="col-md-6" @submit.prevent="payOrder">
       <table class="table align-middle">

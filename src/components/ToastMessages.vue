@@ -19,7 +19,7 @@
         <button
           type="button"
           class="btn-close"
-          @click="clearToast"
+          @click="clearToast(key)"
           aria-label="Close"
         ></button>
       </div>
@@ -44,8 +44,8 @@ export default {
         this.messages.shift();
       }, 6000);
     },
-    clearToast() {
-      this.messages.shift();
+    clearToast(index) {
+      this.messages.splice(index, 1);
     },
   },
   mounted() {

@@ -260,14 +260,17 @@ export default {
         this.status.fileUploading = false;
         if (response.data.success) {
           this.tempProduct.imageUrl = response.data.imageUrl;
+          this.$refs.fileInput.value = '';
           this.emitter.emit('push-message', {
             style: 'success',
-            title: '圖片已上傳',
+            title: '圖片上傳結果',
+            content: response.data.message,
           });
         } else {
+          this.$refs.fileInput.value = '';
           this.emitter.emit('push-message', {
             style: 'danger',
-            title: '圖片已上傳',
+            title: '圖片上傳結果',
             content: response.data.message,
           });
         }

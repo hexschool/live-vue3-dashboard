@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Loading :active="isLoading"></Loading>
+    <Loading :active="isLoading" :z-index="1060"></Loading>
     <div class="row mt-4">
       <div class="col-md-7">
         <table class="table align-middle">
@@ -206,7 +206,7 @@
             class="form-control"
             :class="{ 'is-invalid': errors['電話'] }"
             placeholder="請輸入電話"
-            rules="required"
+            rules="required|min:8|max:10"
             v-model="form.user.tel"
           ></Field>
           <ErrorMessage name="電話" class="invalid-feedback"></ErrorMessage>

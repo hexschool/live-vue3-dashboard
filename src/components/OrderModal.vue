@@ -99,7 +99,7 @@
                   data-bs-dismiss="modal">取消
           </button>
           <button type="button" class="btn btn-primary"
-                  @click="$emit('update-order', tempOrder)">確認</button>
+                  @click="$emit('update-paid', tempOrder)">修改付款狀態</button>
         </div>
       </div>
     </div>

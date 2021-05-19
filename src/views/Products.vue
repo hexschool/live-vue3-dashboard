@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loading :active="isLoading"></Loading>
+    <Loading :active="isLoading" :z-index="1060"></Loading>
     <div class="text-end mt-4">
       <button class="btn btn-primary" type="button" @click="openModal(true)">
         建立新的產品

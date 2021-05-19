@@ -28,7 +28,7 @@ export default {
           this.status = true;
         } else {
           this.$httpMessageState(response, '登入結果');
-          this.$router.push('/login');
+          this.$router.push('/');
         }
       });
   },

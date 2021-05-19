@@ -30,7 +30,7 @@ export default {
       this.$http.post(api)
         .then((response) => {
           if (response.data.success) {
-            this.$router.push('/login');
+            this.$router.push('/');
           }
         });
     },

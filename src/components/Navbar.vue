@@ -33,7 +33,7 @@ export default {
         .then((response) => {
           this.$httpMessageState(response, '登出');
           if (response.data.success) {
-            this.$router.push('/login');
+            this.$router.push('/');
           }
         });
     },

@@ -76,6 +76,15 @@
       </div>
       <!-- 購物車列表 -->
       <div class="col-md-5">
+        <div class="text-end">
+          <button
+            class="btn btn-outline-danger"
+            type="button"
+            @click="deleteAllCarts"
+          >
+            清空購物車
+          </button>
+        </div>
         <table class="table align-middle">
           <thead>
             <tr>
@@ -310,6 +319,20 @@ export default {
         this.getCart();
       });
     },
+    deleteAllCarts() {
+      this.isLoading = true;
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/carts`;
+      this.$http.delete(url).then((response) => {
+        if (response.data.success) {
+          this.$httpMessageState(response, '清除購物車');
+          this.getCart();
+          this.isLoading = false;
+        } else {
+          this.$httpMessageState(response, '清除購物車');
+          this.isLoading = false;
+        }
+      });
+    },
     getCart() {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
       this.isLoading = true;
@@ -323,10 +346,15 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
-        this.$httpMessageState(response, '移除購物車品項');
-        this.status.loadingItem = '';
-        this.isLoading = false;
-        this.getCart();
+        if (response.data.success) {
+          this.$httpMessageState(response, '移除購物車品項');
+          this.status.loadingItem = '';
+          this.isLoading = false;
+          this.getCart();
+        } else {
+          this.$httpMessageState(response, '移除購物車品項');
+          this.isLoading = false;
+        }
       });
     },
     addCouponCode() {

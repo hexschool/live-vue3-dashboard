@@ -104,12 +104,14 @@ export default {
       this.isLoading = true;
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`;
       const paid = {
-        is_paid: !item.is_paid,
+        is_paid: item.is_paid,
       };
       this.$http.put(api, { data: paid }).then((response) => {
         this.isLoading = false;
-        this.getOrders(this.currentPage);
+        const orderComponent = this.$refs.orderModal;
+        orderComponent.hideModal();
         this.$httpMessageState(response, '更新付款狀態');
+        this.getOrders(this.currentPage);
       });
     },
     delOrder() {

@@ -118,7 +118,7 @@ export default {
       this.isLoading = true;
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`;
       const paid = {
-        is_paid: !item.is_paid,
+        is_paid: item.is_paid,
       };
       this.$http.put(api, { data: paid }).then((response) => {
         this.isLoading = false;

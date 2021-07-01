@@ -157,7 +157,7 @@ export default {
       isPaid: false,
     };
   },
-  emits: ['update-product'],
+  emits: ['update-paid'],
   mixins: [modalMixin],
   inject: ['emitter'],
   watch: {

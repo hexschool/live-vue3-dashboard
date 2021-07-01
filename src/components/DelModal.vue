@@ -37,6 +37,7 @@ export default {
       modal: '',
     };
   },
+  emits: ['del-item'],
   methods: {
     openModal() {
       this.modal.show();

@@ -37,6 +37,7 @@ export default {
       },
     },
   },
+  emits: ['del-item'],
   data() {
     return {
       modal: '',

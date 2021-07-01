@@ -156,7 +156,7 @@ export default {
       tempOrder: {},
     };
   },
-  emits: ['update-product'],
+  emits: ['update-paid'],
   inject: ['emitter'],
   watch: {
     order() {

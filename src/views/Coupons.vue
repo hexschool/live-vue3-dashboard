@@ -104,52 +104,43 @@ export default {
       this.$http.get(url, this.tempProduct).then((response) => {
         this.coupons = response.data.coupons;
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     updateCoupon(tempCoupon) {
       this.isLoading = true;
+      let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon`;
+      let httpMethos = 'post';
+      let data = tempCoupon;
       if (this.isNew) {
-        const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon`;
-        this.$http.post(url, { data: tempCoupon }).then((response) => {
-          if (response.data.success) {
-            this.$httpMessageState(response, '新增優惠券');
-            this.isLoading = false;
-            this.getCoupons();
-            this.$refs.couponModal.hideModal();
-          } else {
-            this.$httpMessageState(response, '更新優惠券');
-            this.isLoading = false;
-          }
-        });
-      } else {
-        const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
-        this.$http.put(url, { data: this.tempCoupon }).then((response) => {
-          if (response.data.success) {
-            this.$httpMessageState(response, '更新優惠券');
-            this.isLoading = false;
-            this.getCoupons();
-            this.$refs.couponModal.hideModal();
-          } else {
-            this.$httpMessageState(response, '更新優惠券');
-            this.isLoading = false;
-          }
-        });
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
+        httpMethos = 'put';
+        data = this.tempCoupon;
       }
+      this.$http[httpMethos](url, { data }).then((response) => {
+        this.isLoading = false;
+        this.$httpMessageState(response, '新增優惠券');
+        this.getCoupons();
+        this.$refs.couponModal.hideModal();
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
+      });
     },
     delCoupon() {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
-        if (response.data.success) {
-          this.$httpMessageState(response, '刪除優惠券');
-          this.isLoading = false;
-          const delComponent = this.$refs.delModal;
-          delComponent.hideModal();
-          this.getCoupons();
-        } else {
-          this.$httpMessageState(response, '刪除優惠券');
-          this.isLoading = false;
-        }
+        this.$httpMessageState(response, '刪除優惠券');
+        this.isLoading = false;
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
+        this.getCoupons();
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '刪除優惠券');
       });
     },
   },

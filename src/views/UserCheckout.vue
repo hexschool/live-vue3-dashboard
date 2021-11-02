@@ -75,16 +75,20 @@ export default {
       this.$http.get(url).then((response) => {
         this.order = response.data.order;
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     payOrder() {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/pay/${this.orderId}`;
       this.isLoading = true;
-      this.$http.post(url).then((response) => {
-        if (response.data.success) {
-          this.getOrder();
-        }
+      this.$http.post(url).then(() => {
+        this.getOrder();
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '付款結果');
       });
     },
   },

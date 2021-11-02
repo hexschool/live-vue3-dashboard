@@ -24,12 +24,12 @@ export default {
     const api = `${process.env.VUE_APP_API}/api/user/check`;
     this.$http.post(api)
       .then((response) => {
-        if (response.data.success) {
-          this.status = true;
-        } else {
-          this.$httpMessageState(response, '登入結果');
-          this.$router.push('/');
-        }
+        this.$httpMessageState(response, '登入');
+        this.status = true;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$router.push('/');
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
   },
 };

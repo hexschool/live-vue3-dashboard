@@ -273,6 +273,9 @@ export default {
             content: response.data.message,
           });
         }
+      }).catch((error) => {
+        this.status.fileUploading = true;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     openModal() {

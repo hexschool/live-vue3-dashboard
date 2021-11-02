@@ -40,11 +40,12 @@ export default {
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/articles?page=${page}`;
       this.isLoading = true;
       this.$http.get(api).then((response) => {
-        if (response.data.success) {
-          this.articles = response.data.articles;
-          this.pagination = response.data.pagination;
-        }
+        this.articles = response.data.articles;
+        this.pagination = response.data.pagination;
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
   },

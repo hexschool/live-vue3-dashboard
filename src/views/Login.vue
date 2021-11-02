@@ -1,5 +1,7 @@
 <template>
   <div class="container mt-5">
+    <Loading :active="isLoading" :z-index="1060"></Loading>
+    <ToastMessages></ToastMessages>
     <form class="row justify-content-center" @submit.prevent="signIn">
       <div class="col-md-6">
         <h1 class="h3 mb-3 font-weight-normal">請先登入</h1>
@@ -37,21 +39,36 @@
 </template>
 
 <script>
+import emitter from '@/methods/eventBus';
+import ToastMessages from '@/components/ToastMessages.vue';
+
 export default {
+  components: {
+    ToastMessages,
+  },
   data() {
     return {
+      isLoading: false,
       user: {},
+    };
+  },
+  provide() {
+    return {
+      emitter,
     };
   },
   methods: {
     signIn() {
       const api = `${process.env.VUE_APP_API}/admin/signin`;
+      this.isLoading = true;
       this.$http.post(api, this.user).then((response) => {
-        if (response.data.success) {
-          const { token, expired } = response.data;
-          document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
-          this.$router.push('/admin/products');
-        }
+        const { token, expired } = response.data;
+        document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
+        this.isLoading = false;
+        this.$router.push('/admin/products');
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '登入');
       });
     },
   },

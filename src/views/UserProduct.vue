@@ -59,6 +59,9 @@ export default {
         this.isLoading = false;
         this.$httpMessageState(response, '加入購物車');
         this.$router.push('/user/cart');
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '加入購物車');
       });
     },
   },

@@ -276,6 +276,9 @@ export default {
       this.$http.get(url).then((response) => {
         this.products = response.data.products;
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     getProduct(id) {
@@ -291,24 +294,25 @@ export default {
       };
 
       this.$http.post(url, { data: cart }).then((response) => {
-        this.$httpMessageState(response, '加入購物車');
         this.status.loadingItem = '';
         this.isLoading = false;
+        this.$httpMessageState(response, '加入購物車');
         this.getCart();
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     deleteAllCarts() {
       this.isLoading = true;
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/carts`;
       this.$http.delete(url).then((response) => {
-        if (response.data.success) {
-          this.$httpMessageState(response, '清除購物車');
-          this.getCart();
-          this.isLoading = false;
-        } else {
-          this.$httpMessageState(response, '清除購物車');
-          this.isLoading = false;
-        }
+        this.$httpMessageState(response, '清除購物車');
+        this.getCart();
+        this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '清除購物車');
       });
     },
     getCart() {
@@ -317,6 +321,9 @@ export default {
       this.$http.get(url).then((response) => {
         this.cart = response.data.data;
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     removeCartItem(id) {
@@ -324,15 +331,13 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
-        if (response.data.success) {
-          this.$httpMessageState(response, '移除購物車品項');
-          this.status.loadingItem = '';
-          this.isLoading = false;
-          this.getCart();
-        } else {
-          this.$httpMessageState(response, '移除購物車品項');
-          this.isLoading = false;
-        }
+        this.$httpMessageState(response, '移除購物車品項');
+        this.status.loadingItem = '';
+        this.isLoading = false;
+        this.getCart();
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '移除購物車品項');
       });
     },
     updateCart(data) {
@@ -347,6 +352,9 @@ export default {
         this.$httpMessageState(response, '更新購物車');
         this.isLoading = false;
         this.getCart();
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '更新購物車');
       });
     },
     addCouponCode() {
@@ -359,6 +367,9 @@ export default {
         this.$httpMessageState(response, '加入優惠券');
         this.getCart();
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '加入優惠券');
       });
     },
     createOrder() {
@@ -367,11 +378,12 @@ export default {
       const order = this.form;
       this.$http.post(url, { data: order }).then((response) => {
         this.$httpMessageState(response, '建立訂單');
-        if (response.data.success) {
-          this.$router.push(`/user/checkout/${response.data.orderId}`);
-          this.$refs.form.resetForm();
-        }
+        this.$router.push(`/user/checkout/${response.data.orderId}`);
+        this.$refs.form.resetForm();
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '建立訂單');
       });
     },
   },

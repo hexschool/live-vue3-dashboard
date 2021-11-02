@@ -100,11 +100,12 @@ export default {
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
       this.isLoading = true;
       this.$http.get(api).then((response) => {
-        if (response.data.success) {
-          this.products = response.data.products;
-          this.pagination = response.data.pagination;
-          this.isLoading = false;
-        }
+        this.products = response.data.products;
+        this.pagination = response.data.pagination;
+        this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     openModal(isNew, item) {
@@ -121,6 +122,7 @@ export default {
     updateProduct(item) {
       this.tempProduct = item;
       let api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product`;
+      this.isLoading = true;
       let httpMethod = 'post';
       let status = '新增產品';
       if (!this.isNew) {
@@ -130,13 +132,13 @@ export default {
       }
       const productComponent = this.$refs.productModal;
       this.$http[httpMethod](api, { data: this.tempProduct }).then((response) => {
-        if (response.data.success) {
-          this.$httpMessageState(response, status);
-          productComponent.hideModal();
-          this.getProducts(this.currentPage);
-        } else {
-          this.$httpMessageState(response, status);
-        }
+        this.isLoading = false;
+        this.$httpMessageState(response, status);
+        productComponent.hideModal();
+        this.getProducts(this.currentPage);
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, status);
       });
     },
     openDelProductModal(item) {
@@ -148,10 +150,14 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
+        this.isLoading = false;
         this.$httpMessageState(response, '刪除產品');
         const delComponent = this.$refs.delModal;
         delComponent.hideModal();
         this.getProducts(this.currentPage);
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '刪除產品');
       });
     },
   },

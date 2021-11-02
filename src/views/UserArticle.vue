@@ -33,10 +33,11 @@ export default {
       const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/article/${this.id}`;
       this.isLoading = true;
       this.$http.get(api).then((response) => {
-        if (response.data.success) {
-          this.article = response.data.article;
-        }
+        this.article = response.data.article;
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
   },

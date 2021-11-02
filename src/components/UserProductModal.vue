@@ -91,6 +91,9 @@ export default {
             content: response.data.message,
           });
         }
+      }).catch((error) => {
+        this.status.fileUploading = false;
+        this.$httpMessageState(error.response, '圖片失敗');
       });
     },
   },

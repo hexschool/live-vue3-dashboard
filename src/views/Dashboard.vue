@@ -2,7 +2,7 @@
   <Navbar/>
   <div class="container-fluid mt-3 position-relative">
     <ToastMessages></ToastMessages>
-    <router-view/>
+    <router-view v-if="status"/>
   </div>
 </template>
 
@@ -13,6 +13,11 @@ import Navbar from '@/components/Navbar.vue';
 
 export default {
   components: { Navbar, ToastMessages },
+  data() {
+    return {
+      status: false,
+    };
+  },
   provide() {
     return {
       emitter,
@@ -25,9 +30,10 @@ export default {
     this.$http.post(api)
       .then((response) => {
         this.$httpMessageState(response, '登入');
-        if (!response.data.success) {
-          this.$router.push('/');
-        }
+        this.status = true;
+      }).catch((error) => {
+        this.$httpMessageState(error.response, '錯誤訊息');
+        this.$router.push('/');
       });
   },
 };

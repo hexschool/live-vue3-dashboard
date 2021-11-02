@@ -101,6 +101,9 @@ export default {
         this.orders = response.data.orders;
         this.pagination = response.data.pagination;
         this.isLoading = false;
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     openModal(item) {
@@ -126,15 +129,22 @@ export default {
         orderComponent.hideModal();
         this.getOrders(this.currentPage);
         this.$httpMessageState(response, '更新付款狀態');
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     delOrder() {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/order/${this.tempOrder.id}`;
       this.isLoading = true;
       this.$http.delete(url).then(() => {
+        this.isLoading = false;
         const delComponent = this.$refs.delModal;
         delComponent.hideModal();
         this.getOrders(this.currentPage);
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
   },

@@ -35,6 +35,8 @@ export default {
           if (response.data.success) {
             this.$router.push('/');
           }
+        }).catch((error) => {
+          this.$httpMessageState(error.response, '錯誤訊息');
         });
     },
   },

@@ -138,6 +138,7 @@ export default {
       let api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article`;
       let httpMethod = 'post';
       let status = '新增貼文';
+      this.isLoading = true;
       if (!this.isNew) {
         api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article/${this.tempArticle.id}`;
         httpMethod = 'put';
@@ -145,13 +146,13 @@ export default {
       }
       const articleComponent = this.$refs.articleModal;
       this.$http[httpMethod](api, { data: this.tempArticle }).then((response) => {
-        if (response.data.success) {
-          this.$httpMessageState(response, status);
-          articleComponent.hideModal();
-          this.getArticles(this.currentPage);
-        } else {
-          this.$httpMessageState(response, status);
-        }
+        this.isLoading = false;
+        this.$httpMessageState(response, status);
+        articleComponent.hideModal();
+        this.getArticles(this.currentPage);
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
     },
     openDelArticleModal(item) {
@@ -163,14 +164,14 @@ export default {
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article/${this.tempArticle.id}`;
       this.isLoading = true;
       this.$http.delete(url).then((response) => {
-        if (response.data.success) {
-          this.$httpMessageState(response, '刪除貼文');
-          const delComponent = this.$refs.delModal;
-          delComponent.hideModal();
-          this.getArticles(this.currentPage);
-        } else {
-          this.$httpMessageState(response, '刪除貼文');
-        }
+        this.isLoading = false;
+        this.$httpMessageState(response, '刪除貼文');
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
+        this.getArticles(this.currentPage);
+      }).catch((error) => {
+        this.isLoading = false;
+        this.$httpMessageState(error.response, '刪除貼文');
       });
     },
   },

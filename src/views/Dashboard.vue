@@ -32,8 +32,8 @@ export default {
         this.$httpMessageState(response, '登入');
         this.status = true;
       }).catch((error) => {
-        this.$httpMessageState(error.response, '錯誤訊息');
         this.$router.push('/');
+        this.$httpMessageState(error.response, '錯誤訊息');
       });
   },
 };

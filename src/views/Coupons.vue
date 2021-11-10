@@ -115,7 +115,7 @@ export default {
       let httpMethos = 'post';
       let data = tempCoupon;
 
-      if (this.isNew) {
+      if (!this.isNew) {
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
         httpMethos = 'put';
         data = this.tempCoupon;

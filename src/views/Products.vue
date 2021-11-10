@@ -61,7 +61,7 @@
       ref="productModal"
     />
     <!-- DelModal -->
-    <DelModal :item="tempProduct" ref="delModal" @del-item="delProduct" />
+    <DelModal :item="tempProduct" ref="delModal" @del-item="delProduct"></DelModal>
   </div>
 </template>
 

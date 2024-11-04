@@ -101,7 +101,7 @@ export default {
     getCoupons() {
       this.isLoading = true;
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupons`;
-      this.$http.get(url, this.tempProduct).then((response) => {
+      this.$http.get(url).then((response) => {
         this.coupons = response.data.coupons;
         this.isLoading = false;
       }).catch((error) => {
